@@ -1,0 +1,731 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Crear Cuenta - Easy To Do{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registration-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .registration-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .registration-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .registration-header h2 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
+    }
+
+    .registration-header p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-main);
+        font-size: 0.9rem;
+    }
+
+    .form-label .required {
+        color: var(--color-danger);
+    }
+
+    .input-group-custom {
+        position: relative;
+    }
+
+    .input-group-custom i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    .input-group-custom .toggle-password {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 1.5rem;
+        transition: color 0.2s;
+        left: auto;
+        z-index: 10;
+    }
+
+    .input-group-custom .toggle-password:hover {
+        color: var(--color-primary);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .form-control.has-toggle {
+        padding-right: 3rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-control.is-invalid {
+        border-color: var(--color-danger);
+    }
+
+    .form-control.is-invalid:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-control.is-valid {
+        border-color: var(--color-success);
+        background-image: none;
+        /* Remove Bootstrap's checkmark icon */
+    }
+
+    .form-control.is-valid:focus {
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        background-image: none;
+        /* Remove Bootstrap's checkmark icon */
+    }
+
+    .form-control.is-invalid {
+        background-image: none;
+        /* Remove Bootstrap's X icon */
+    }
+
+    .field-feedback {
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        display: none;
+    }
+
+    .field-feedback.error {
+        color: var(--color-danger);
+        display: block;
+    }
+
+    .field-feedback.success {
+        color: var(--color-success);
+        display: block;
+    }
+
+    .password-strength {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .password-strength-bar {
+        height: 4px;
+        border-radius: 2px;
+        background-color: var(--border-light);
+        margin-top: 0.25rem;
+        overflow: hidden;
+    }
+
+    .password-strength-fill {
+        height: 100%;
+        transition: width 0.3s, background-color 0.3s;
+        width: 0%;
+    }
+
+    .strength-weak {
+        background-color: var(--color-danger);
+    }
+
+    .strength-medium {
+        background-color: var(--color-warning);
+    }
+
+    .strength-strong {
+        background-color: var(--color-success);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 0.875rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+        color: var(--text-inverse);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-top: 1.5rem;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -10px var(--color-primary);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .login-link a {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+
+    .login-link a:hover {
+        color: var(--color-primary-hover);
+    }
+
+    .alert {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-danger {
+        background-color: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #FECACA;
+    }
+
+    .alert-success {
+        background-color: #D1FAE5;
+        color: #065F46;
+        border: 1px solid #A7F3D0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="registration-container">
+    <div class="registration-card">
+        <div class="registration-header">
+            <h2><i class="bi bi-person-plus-fill" style="color: var(--color-primary);"></i> Crear Cuenta</h2>
+            <p>Únete a Easy To Do y organiza tu vida</p>
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i
+                class="bi bi-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}-fill"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post" id="registrationForm" novalidate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username" class="form-label">
+                    Nombre de Usuario <span class="required">*</span>
+                </label>
+                <div class="input-group-custom">
+                    <i class="bi bi-person"></i>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ username }}"
+                        minlength="3" required placeholder="Ej: juan_perez">
+                </div>
+                <div class="field-feedback" id="usernameFeedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">
+                    Correo Electrónico <span class="required">*</span>
+                </label>
+                <div class="input-group-custom">
+                    <i class="bi bi-envelope"></i>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required
+                        placeholder="correo@ejemplo.com">
+                </div>
+                <div class="field-feedback" id="emailFeedback"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">
+                            Nombre <span class="required">*</span>
+                        </label>
+                        <div class="input-group-custom">
+                            <i class="bi bi-person-badge"></i>
+                            <input type="text" class="form-control" id="first_name" name="first_name"
+                                value="{{ first_name }}" minlength="3" required placeholder="Juan">
+                        </div>
+                        <div class="field-feedback" id="firstNameFeedback"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="last_name" class="form-label">
+                            Apellidos <span class="required">*</span>
+                        </label>
+                        <div class="input-group-custom">
+                            <i class="bi bi-person-badge-fill"></i>
+                            <input type="text" class="form-control" id="last_name" name="last_name"
+                                value="{{ last_name }}" minlength="3" required placeholder="Pérez">
+                        </div>
+                        <div class="field-feedback" id="lastNameFeedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">
+                    Contraseña <span class="required">*</span>
+                </label>
+                <div class="input-group-custom">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" class="form-control has-toggle" id="password" name="password" required
+                        placeholder="••••••••">
+                    <button type="button" class="toggle-password"
+                        onclick="togglePassword('password', 'togglePassword1')">
+                        <i class="bi bi-eye" id="togglePassword1"></i>
+                    </button>
+                </div>
+                <div class="field-feedback" id="passwordFeedback"></div>
+                <div class="password-strength" id="passwordStrength" style="display: none;">
+                    <small id="strengthText">Fortaleza: <span id="strengthLabel">Débil</span></small>
+                    <div class="password-strength-bar">
+                        <div class="password-strength-fill" id="strengthBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirm" class="form-label">
+                    Confirmar Contraseña <span class="required">*</span>
+                </label>
+                <div class="input-group-custom">
+                    <i class="bi bi-lock-fill"></i>
+                    <input type="password" class="form-control has-toggle" id="password_confirm" name="password_confirm"
+                        required placeholder="••••••••">
+                    <button type="button" class="toggle-password"
+                        onclick="togglePassword('password_confirm', 'togglePassword2')">
+                        <i class="bi bi-eye" id="togglePassword2"></i>
+                    </button>
+                </div>
+                <div class="field-feedback" id="passwordConfirmFeedback"></div>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-check-circle"></i> Crear Cuenta
+            </button>
+
+            <div class="login-link">
+                ¿Ya tienes una cuenta? <a href="#">Iniciar Sesión</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle password visibility
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+
+    // Password strength indicator
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthLabel = document.getElementById('strengthLabel');
+
+    passwordInput.addEventListener('input', function () {
+        const password = this.value;
+
+        if (password.length === 0) {
+            passwordStrength.style.display = 'none';
+            return;
+        }
+
+        passwordStrength.style.display = 'block';
+
+        let strength = 0;
+
+        // Length check
+        if (password.length >= 8) strength += 25;
+        if (password.length >= 12) strength += 15;
+
+        // Has lowercase
+        if (/[a-z]/.test(password)) strength += 15;
+
+        // Has uppercase
+        if (/[A-Z]/.test(password)) strength += 20;
+
+        // Has number
+        if (/[0-9]/.test(password)) strength += 15;
+
+        // Has special character
+        if (/[^a-zA-Z0-9]/.test(password)) strength += 10;
+
+        strengthBar.style.width = strength + '%';
+
+        // Update label and color
+        if (strength < 40) {
+            strengthLabel.textContent = 'Débil';
+            strengthBar.className = 'password-strength-fill strength-weak';
+        } else if (strength < 70) {
+            strengthLabel.textContent = 'Media';
+            strengthBar.className = 'password-strength-fill strength-medium';
+        } else {
+            strengthLabel.textContent = 'Fuerte';
+            strengthBar.className = 'password-strength-fill strength-strong';
+        }
+    });
+
+    // Form validation
+    const form = document.getElementById('registrationForm');
+    const inputs = form.querySelectorAll('input[required]');
+
+    // Username validation
+    const usernameInput = document.getElementById('username');
+    const usernameFeedback = document.getElementById('usernameFeedback');
+
+    usernameInput.addEventListener('blur', function () {
+        if (!this.value.trim()) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            usernameFeedback.textContent = 'El nombre de usuario es requerido.';
+            usernameFeedback.className = 'field-feedback error';
+        } else if (this.value.trim().length < 3) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            usernameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            usernameFeedback.className = 'field-feedback error';
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            usernameFeedback.style.display = 'none';
+        }
+    });
+
+    usernameInput.addEventListener('input', function () {
+        if (this.value.trim().length >= 3) {
+            this.classList.remove('is-invalid');
+            usernameFeedback.style.display = 'none';
+        }
+    });
+
+    // Email validation
+    const emailInput = document.getElementById('email');
+    const emailFeedback = document.getElementById('emailFeedback');
+
+    emailInput.addEventListener('blur', function () {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!this.value.trim()) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            emailFeedback.textContent = 'El correo electrónico es requerido.';
+            emailFeedback.className = 'field-feedback error';
+        } else if (!emailPattern.test(this.value)) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            emailFeedback.textContent = 'Por favor ingresa un correo electrónico válido.';
+            emailFeedback.className = 'field-feedback error';
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            emailFeedback.style.display = 'none';
+        }
+    });
+
+    emailInput.addEventListener('input', function () {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (emailPattern.test(this.value)) {
+            this.classList.remove('is-invalid');
+            emailFeedback.style.display = 'none';
+        }
+    });
+
+    // First name validation
+    const firstNameInput = document.getElementById('first_name');
+    const firstNameFeedback = document.getElementById('firstNameFeedback');
+
+    firstNameInput.addEventListener('blur', function () {
+        if (!this.value.trim()) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            firstNameFeedback.textContent = 'El nombre es requerido.';
+            firstNameFeedback.className = 'field-feedback error';
+        } else if (this.value.trim().length < 3) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            firstNameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            firstNameFeedback.className = 'field-feedback error';
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            firstNameFeedback.style.display = 'none';
+        }
+    });
+
+    firstNameInput.addEventListener('input', function () {
+        if (this.value.trim().length >= 3) {
+            this.classList.remove('is-invalid');
+            firstNameFeedback.style.display = 'none';
+        }
+    });
+
+    // Last name validation
+    const lastNameInput = document.getElementById('last_name');
+    const lastNameFeedback = document.getElementById('lastNameFeedback');
+
+    lastNameInput.addEventListener('blur', function () {
+        if (!this.value.trim()) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            lastNameFeedback.textContent = 'Los apellidos son requeridos.';
+            lastNameFeedback.className = 'field-feedback error';
+        } else if (this.value.trim().length < 3) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            lastNameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            lastNameFeedback.className = 'field-feedback error';
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            lastNameFeedback.style.display = 'none';
+        }
+    });
+
+    lastNameInput.addEventListener('input', function () {
+        if (this.value.trim().length >= 3) {
+            this.classList.remove('is-invalid');
+            lastNameFeedback.style.display = 'none';
+        }
+    });
+
+    // Password confirmation validation
+    const passwordConfirm = document.getElementById('password_confirm');
+    const passwordConfirmFeedback = document.getElementById('passwordConfirmFeedback');
+
+    passwordConfirm.addEventListener('blur', function () {
+        if (!this.value) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Confirma tu contraseña.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+        } else if (this.value !== passwordInput.value) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Las contraseñas no coinciden.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            passwordConfirmFeedback.style.display = 'none';
+        }
+    });
+
+    passwordConfirm.addEventListener('input', function () {
+        if (this.value === passwordInput.value && this.value.length > 0) {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            passwordConfirmFeedback.style.display = 'none';
+        } else if (this.value !== passwordInput.value && this.value.length > 0) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Las contraseñas no coinciden.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+        } else if (this.value.length === 0) {
+            this.classList.remove('is-invalid');
+            this.classList.remove('is-valid');
+            passwordConfirmFeedback.style.display = 'none';
+        }
+    });
+
+    // Also validate password confirm when password changes
+    passwordInput.addEventListener('input', function () {
+        if (passwordConfirm.value && passwordConfirm.value !== this.value) {
+            passwordConfirm.classList.add('is-invalid');
+            passwordConfirm.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Las contraseñas no coinciden.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+        } else if (passwordConfirm.value === this.value && passwordConfirm.value.length > 0) {
+            passwordConfirm.classList.remove('is-invalid');
+            passwordConfirm.classList.add('is-valid');
+            passwordConfirmFeedback.style.display = 'none';
+        } else if (passwordConfirm.value.length === 0) {
+            passwordConfirm.classList.remove('is-invalid');
+            passwordConfirm.classList.remove('is-valid');
+            passwordConfirmFeedback.style.display = 'none';
+        }
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Validate username
+        if (!usernameInput.value.trim()) {
+            usernameInput.classList.add('is-invalid');
+            usernameInput.classList.remove('is-valid');
+            usernameFeedback.textContent = 'El nombre de usuario es requerido.';
+            usernameFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (usernameInput.value.trim().length < 3) {
+            usernameInput.classList.add('is-invalid');
+            usernameInput.classList.remove('is-valid');
+            usernameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            usernameFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+
+        // Validate email
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailInput.value.trim()) {
+            emailInput.classList.add('is-invalid');
+            emailInput.classList.remove('is-valid');
+            emailFeedback.textContent = 'El correo electrónico es requerido.';
+            emailFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (!emailPattern.test(emailInput.value)) {
+            emailInput.classList.add('is-invalid');
+            emailInput.classList.remove('is-valid');
+            emailFeedback.textContent = 'Por favor ingresa un correo electrónico válido.';
+            emailFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+
+        // Validate first name
+        if (!firstNameInput.value.trim()) {
+            firstNameInput.classList.add('is-invalid');
+            firstNameInput.classList.remove('is-valid');
+            firstNameFeedback.textContent = 'El nombre es requerido.';
+            firstNameFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (firstNameInput.value.trim().length < 3) {
+            firstNameInput.classList.add('is-invalid');
+            firstNameInput.classList.remove('is-valid');
+            firstNameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            firstNameFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+
+        // Validate last name
+        if (!lastNameInput.value.trim()) {
+            lastNameInput.classList.add('is-invalid');
+            lastNameInput.classList.remove('is-valid');
+            lastNameFeedback.textContent = 'Los apellidos son requeridos.';
+            lastNameFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (lastNameInput.value.trim().length < 3) {
+            lastNameInput.classList.add('is-invalid');
+            lastNameInput.classList.remove('is-valid');
+            lastNameFeedback.textContent = 'Debe tener al menos 3 caracteres.';
+            lastNameFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+
+        // Validate password
+        if (!passwordInput.value) {
+            passwordInput.classList.add('is-invalid');
+            passwordInput.classList.remove('is-valid');
+            const passwordFeedback = document.getElementById('passwordFeedback');
+            passwordFeedback.textContent = 'La contraseña es requerida.';
+            passwordFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (passwordInput.value.length < 8) {
+            passwordInput.classList.add('is-invalid');
+            passwordInput.classList.remove('is-valid');
+            const passwordFeedback = document.getElementById('passwordFeedback');
+            passwordFeedback.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+            passwordFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (!/[A-Z]/.test(passwordInput.value)) {
+            passwordInput.classList.add('is-invalid');
+            passwordInput.classList.remove('is-valid');
+            const passwordFeedback = document.getElementById('passwordFeedback');
+            passwordFeedback.textContent = 'Debe contener al menos una letra mayúscula.';
+            passwordFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (!/[0-9]/.test(passwordInput.value)) {
+            passwordInput.classList.add('is-invalid');
+            passwordInput.classList.remove('is-valid');
+            const passwordFeedback = document.getElementById('passwordFeedback');
+            passwordFeedback.textContent = 'Debe contener al menos un número.';
+            passwordFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+        // Validate password confirmation
+        if (!passwordConfirm.value) {
+            passwordConfirm.classList.add('is-invalid');
+            passwordConfirm.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Confirma tu contraseña.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+            isValid = false;
+        } else if (passwordInput.value && passwordConfirm.value !== passwordInput.value) {
+            passwordConfirm.classList.add('is-invalid');
+            passwordConfirm.classList.remove('is-valid');
+            passwordConfirmFeedback.textContent = 'Las contraseñas no coinciden.';
+            passwordConfirmFeedback.className = 'field-feedback error';
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+</script>
+{% endblock %}
