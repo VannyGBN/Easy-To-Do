@@ -1,0 +1,58 @@
+:root {
+  /* --- Brand Colors --- */
+  --color-primary:       #6366F1; /* Índigo */
+  --color-primary-hover: #4F46E5;
+  --color-primary-light: #E0E7FF; /* Fondo suave para items seleccionados */
+  
+  /* --- Functional Colors --- */
+  --color-success:       #10B981; /* Completado */
+  --color-warning:       #F59E0B; /* Alerta */
+  --color-danger:        #EF4444; /* Error/Eliminar */
+  --color-info:          #3B82F6; 
+  
+  /* --- Backgrounds & Surfaces --- */
+  --bg-app:              #F8FAFC; /* Fondo de la ventana */
+  --bg-card:             #FFFFFF; /* Fondo de la tarea/item */
+  --bg-modal:            #FFFFFF;
+  
+  /* --- Typography --- */
+  --text-main:           #1E293B; /* Principal */
+  --text-secondary:      #64748B; /* Secundario/Fechas */
+  --text-muted:          #94A3B8; /* Placeholders */
+  --text-inverse:        #FFFFFF; /* Texto sobre botones oscuros */
+  
+  /* --- Borders & Outlines --- */
+  --border-light:        #E2E8F0;
+  --border-focus:        #6366F1; /* Mismo que primary */
+}
+
+/* Base Styles */
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Utility Classes */
+.task-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
